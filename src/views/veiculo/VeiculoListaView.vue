@@ -41,8 +41,42 @@
     </div>
 </template>
 
+
 <script lang="ts">
 
+import { defineComponent } from 'vue';
+import NavBar from '@/components/NavBar.vue'; // @ is an alias to /src
+import { Veiculo } from '@/models/veiculo';
+import VeiculoClient from '@/client/veiculo.client';
+
+export default defineComponent({
+  name: 'VeiculoListaView',
+  data() {
+    return {
+      veiculosList: new Array<Veiculo>(),
+    };
+  },
+  components: {
+    NavBar,
+  },
+  mounted(){
+    this.findAll();
+  },
+
+  methods:{
+
+    findAll(){
+      VeiculoClient.listAll().then(sucess =>{
+            console.log("OI")
+            this.veiculosList =sucess
+        })
+        .catch(error =>{
+          console.log(error)
+        })
+    }
+  }
+
+});
 </script>
 
 <style lang="scss">

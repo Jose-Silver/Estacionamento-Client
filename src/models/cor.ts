@@ -1,3 +1,33 @@
 export enum Cor{
-    AZUL, AMARELO, VERMELHO, PRETO, CINZA, BRANCO
+    AMARELO,
+
+    AZUL,
+
+    BEGE,
+
+    BRANCA,
+
+    CINZA,
+
+    DOURADA,
+
+    GRENA,
+
+    LARANJA,
+
+    MARROM,
+
+    PRATA,
+
+    PRETA,
+
+    ROSA,
+
+    ROXA,
+
+    VERDE,
+
+    VERMELHA,
+
+    FANTASIA
 }

@@ -1,15 +1,13 @@
-
-
 import axios, { AxiosInstance } from "axios";
 
+import { Veiculo } from "@/models/veiculo";
 import { PageRequest } from "@/models/pages/page-request";
 import { PageResponse } from "@/models/pages/page-response";
-import { Veiculo } from "@/models/veiculo";
+import { Movimentacao } from "@/models/movimentacao";
 
+class VeiculoClient {
 
-export class ModeloClient {
-    
-    private axiosClient : AxiosInstance
+    private axiosClient : AxiosInstance;
 
     constructor(){
         this.axiosClient = axios.create({
@@ -42,25 +40,25 @@ export class ModeloClient {
         }
     }
 
-    public async cadastrar(veiculo : Veiculo) : Promise<void> {
+    public async cadastrar(veiculo : Veiculo) : Promise<string> {
         try {
-            return (await this.axiosClient.post('/', veiculo))
+            return (await this.axiosClient.post<string>('', veiculo)).data
         } catch (error : any) {
             return Promise.reject(error.response)
         }
     }
 
-    public async editar(veiculo : Veiculo) : Promise<void> {
+    public async editar(id : number, veiculo : Veiculo) : Promise<string> {
         try {
-            return (await this.axiosClient.put(`/${veiculo.id}`, veiculo)).data
+            return (await this.axiosClient.put<string>(`/${id}`, veiculo)).data
         } catch (error : any) {
             return Promise.reject(error.response)
         }
     }
 
-    public async deletar(veiculo : Veiculo) : Promise<string> {
+    public async deletar(id : number) : Promise<string> {
         try {
-            return (await this.axiosClient.delete(`/${veiculo.id}`)).data
+            return (await this.axiosClient.delete(`/${id}`)).data
         } catch (error : any) {
             return Promise.reject(error.response)
         }
@@ -80,3 +78,5 @@ export class ModeloClient {
         }
     }
 }
+export default new VeiculoClient();
+
