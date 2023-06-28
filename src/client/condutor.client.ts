@@ -4,13 +4,13 @@ import { Condutor } from "@/models/condutor";
 import { PageRequest } from "@/models/pages/page-request";
 import { PageResponse } from "@/models/pages/page-response";
 
-export class CondutorClient {
+ class CondutorClient {
 
     private axiosClient : AxiosInstance;
 
     constructor(){
         this.axiosClient = axios.create({
-            baseURL: 'http://localhost:8080/api/condutor',
+            baseURL: 'http://localhost:8080/condutor',
             headers: {'Content-type' : 'application/json'}
         });
     }
@@ -25,7 +25,7 @@ export class CondutorClient {
 
     public async listAll() : Promise<Condutor[]> {
         try {
-            return (await this.axiosClient.get<Condutor[]>(`/lista`)).data
+            return (await this.axiosClient.get<Condutor[]>(`/all`)).data
         } catch (error : any) {
             return Promise.reject(error.response)
         }
@@ -33,7 +33,7 @@ export class CondutorClient {
 
     public async findByAtivo() : Promise<Condutor[]> {
         try {
-            return (await this.axiosClient.get<Condutor[]>(`/ativo`)).data
+            return (await this.axiosClient.get<Condutor[]>(`/ativos`)).data
         } catch (error : any) {
             return Promise.reject(error.response)
         }
@@ -41,7 +41,7 @@ export class CondutorClient {
 
     public async cadastrar(condutor : Condutor) : Promise<void> {
         try {
-            return (await this.axiosClient.post('/', condutor))
+            return (await this.axiosClient.post('', condutor))
         } catch (error : any) {
             return Promise.reject(error.response)
         }
@@ -50,7 +50,7 @@ export class CondutorClient {
 
     public async editar(condutor : Condutor) : Promise<void> {
         try {
-            return (await this.axiosClient.put(`/${condutor.id}`, condutor)).data
+            return (await this.axiosClient.put(`/update/${condutor.id}`, condutor)).data
         } catch (error : any) {
             return Promise.reject(error.response)
         }
@@ -58,7 +58,7 @@ export class CondutorClient {
 
     public async deletar(condutor : Condutor) : Promise<string> {
         try {
-            return (await this.axiosClient.delete(`/${condutor.id}`)).data
+            return (await this.axiosClient.delete(`/delete/${condutor.id}`)).data
         } catch (error : any) {
             return Promise.reject(error.response)
         }
@@ -79,3 +79,5 @@ export class CondutorClient {
     
     } 
 }
+
+export default new CondutorClient;

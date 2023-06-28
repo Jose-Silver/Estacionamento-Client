@@ -4,13 +4,13 @@ import { Movimentacao } from "@/models/movimentacao";
 import { PageRequest } from "@/models/pages/page-request";
 import { PageResponse } from "@/models/pages/page-response";
 
-export class MovimentacaoClient {
+class MovimentacaoClient {
 
     private axiosClient : AxiosInstance;
 
     constructor(){
         this.axiosClient = axios.create({
-            baseURL: 'http://localhost:8080/api/movimentacao',
+            baseURL: 'http://localhost:8080/movimentacao',
             headers: {'Content-type' : 'application/json'}
         });
     }
@@ -25,32 +25,41 @@ export class MovimentacaoClient {
 
     public async listAll() : Promise<Movimentacao[]> {
         try {
-            return (await this.axiosClient.get<Movimentacao[]>(`/lista`)).data
+            return (await this.axiosClient.get<Movimentacao[]>(`/all`)).data
         } catch (error : any) {
             return Promise.reject(error.response)
         }
     }
 
 
-    public async cadastrar(movimentacao : Movimentacao) : Promise<void> {
+
+    public async cadastrar(movimentacao : Movimentacao) : Promise<string> {
         try { 
-            return (await this.axiosClient.post('/', movimentacao))
+            return (await this.axiosClient.post<string>('', movimentacao)).data
         } catch (error : any) {
             return Promise.reject(error.response)
         }
     }
 
-    public async editar(movimentacao : Movimentacao) : Promise<void> {
+    public async editar(id : number, movimentacao : Movimentacao) : Promise<string> {
         try {
-            return (await this.axiosClient.put(`/${movimentacao.id}`, movimentacao)).data
+            return (await this.axiosClient.put<string>(`/update/${id}`, movimentacao)).data
         } catch (error : any) {
             return Promise.reject(error.response)
         }
     }
 
-    public async deletar(movimentacao : Movimentacao) : Promise<string> {
+    public async fecharMovimentacao(id : number) : Promise<string> {
+        try { 
+            return (await this.axiosClient.put<string>(`/saida/${id}`)).data
+        } catch (error : any) {
+            return Promise.reject(error.response)
+        }
+    }
+
+    public async deletar(id : number) : Promise<void> {
         try {
-            return (await this.axiosClient.delete(`/${movimentacao.id}`)).data
+            return (await this.axiosClient.delete(`/${id}`)).data
         } catch (error : any) {
             return Promise.reject(error.response)
         }
@@ -72,3 +81,5 @@ export class MovimentacaoClient {
 
     
 }
+
+export default new MovimentacaoClient()

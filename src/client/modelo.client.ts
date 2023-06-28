@@ -1,73 +1,63 @@
+import { Modelo } from "@/models/modelo";
 import axios, { AxiosInstance } from "axios";
 
-import { Modelo } from "@/models/modelo";
-import { PageRequest } from "@/models/pages/page-request";
-import { PageResponse } from "@/models/pages/page-response";
+class ModeloClient {
 
-export class ModeloClient {
-    
-    private axiosClient : AxiosInstance
+    private axiosModelo: AxiosInstance;
 
-    constructor(){
-        this.axiosClient = axios.create({
-            baseURL: 'http://localhost:8080/api/modelo',
-            headers: {'Content-Type' : 'application/json'}
-        });
+    constructor() {
+        this.axiosModelo = axios.create({
+            baseURL: "http://localhost:8080/modelo",
+            headers: { "Content-Type": "application/JSON" }
+        })
     }
 
-    public async findById(id : number) : Promise<Modelo> {
+    public async findById(id: number): Promise<Modelo> {
         try {
-            return (await this.axiosClient.get<Modelo>(`/${id}`)).data
-        } catch (error : any) {
+            return (await this.axiosModelo.get<Modelo>(`/${id}`)).data
+        } catch (error: any) {
             return Promise.reject(error.response)
         }
     }
 
-    public async listAll() : Promise<Modelo[]> {
+    public async listaAll(): Promise<Modelo[]> {
         try {
-            return (await this.axiosClient.get<Modelo[]>(`/lista`)).data
-        } catch (error : any) {
+            return (await this.axiosModelo.get<Modelo[]>(`/all`)).data
+        } catch (error: any) {
             return Promise.reject(error.response)
         }
     }
 
-    public async findByAtivo() : Promise<Modelo[]> {
+    public async cadastrar(modelo: Modelo): Promise<string> {
+
+        var personalizedData = {
+            nome: modelo.nome,
+            marca: modelo.marca.id,
+        };
+
+        var jsonData = JSON.stringify(personalizedData);
+
         try {
-            return (await this.axiosClient.get<Modelo[]>(`/ativo`)).data
-        } catch (error : any) {
+            return (await this.axiosModelo.post<string>(``, jsonData)).data
+        } catch (error: any) {
             return Promise.reject(error.response)
         }
     }
 
-    public async cadastrar(modelo : Modelo) : Promise<void> {
+    public async editar(id: number, modelo: Modelo): Promise<string> {
         try {
-            return (await this.axiosClient.post('/', modelo))
-        } catch (error : any) {
+            return (await this.axiosModelo.put<string>(`/update/${id}`, modelo)).data
+        } catch (error: any) {
             return Promise.reject(error.response)
         }
     }
 
-    public async editar(modelo : Modelo) : Promise<void> {
+    public async excluir(id: number): Promise<string> {
         try {
-            return (await this.axiosClient.post(`/${modelo.id}`, modelo)).data
-        } catch (error : any) {
-            return Promise.reject(error.response)
-        }
-        
-    }
-
-
-    public async findByFiltrosPaginado(pageRequest : PageRequest) : Promise<PageResponse<Modelo>> {
-        try {
-            let requestPath = ''
-
-            requestPath += `?page=${pageRequest.currentPage}`
-            requestPath += `&size=${pageRequest.pageSize}`
-            requestPath += `&sort=${pageRequest.sortField === undefined ? '' : pageRequest.sortField}, ${pageRequest.direction}`
-
-            return (await this.axiosClient.get<PageResponse<Modelo>>(requestPath, {params : {filtros : pageRequest.filter } })).data
-        } catch (error : any) {
+            return (await this.axiosModelo.delete<string>(`/delete/${id}`)).data
+        } catch (error: any) {
             return Promise.reject(error.response)
         }
     }
 }
+export default new ModeloClient;

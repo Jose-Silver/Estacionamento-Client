@@ -11,7 +11,7 @@ class VeiculoClient {
 
     constructor(){
         this.axiosClient = axios.create({
-            baseURL: 'http://localhost:8080/api/veiculo',
+            baseURL: 'http://localhost:8080/veiculo',
             headers: {'Content-Type' : 'application/json'}
         });
     }
@@ -26,7 +26,7 @@ class VeiculoClient {
 
     public async listAll() : Promise<Veiculo[]> {
         try { 
-            return (await this.axiosClient.get<Veiculo[]>(`/lista`)).data
+            return (await this.axiosClient.get<Veiculo[]>(`/all`)).data
         } catch (error : any) {
             return Promise.reject(error.response)
         }
@@ -34,7 +34,7 @@ class VeiculoClient {
 
     public async findByAtivo() : Promise<Veiculo[]> {
         try {
-            return (await this.axiosClient.get<Veiculo[]>(`/ativo`)).data
+            return (await this.axiosClient.get<Veiculo[]>(`/ativos`)).data
         } catch (error : any) {
             return Promise.reject(error.response)
         }
@@ -50,7 +50,7 @@ class VeiculoClient {
 
     public async editar(id : number, veiculo : Veiculo) : Promise<string> {
         try {
-            return (await this.axiosClient.put<string>(`/${id}`, veiculo)).data
+            return (await this.axiosClient.put<string>(`/update/${id}`, veiculo)).data
         } catch (error : any) {
             return Promise.reject(error.response)
         }
@@ -58,7 +58,7 @@ class VeiculoClient {
 
     public async deletar(id : number) : Promise<string> {
         try {
-            return (await this.axiosClient.delete(`/${id}`)).data
+            return (await this.axiosClient.delete(`/delete/${id}`)).data
         } catch (error : any) {
             return Promise.reject(error.response)
         }
